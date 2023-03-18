@@ -1,0 +1,36 @@
+{
+  "name": "uniswap-swapping-and-add-liquidity-programatically",
+  "version": "1.0.0",
+  "description": "Swap and add liquidity programatically on Uniswap",
+  "main": "main.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/main.js",
+    "start:dev": "tsc-watch --onSuccess \"node dist/main.js\""
+  },
+  "keywords": [
+    "Uniswap",
+    "Swap",
+    "Add Liquidity",
+    "Programatically",
+    "Solidity",
+    "DeFi",
+    "DEX",
+    "Ethereum",
+    "Smart Contract",
+    "Blockchain",
+    "Web3",
+    "Ethers.js"
+  ],
+  "author": "George Kiknadze",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^18.15.3",
+    "tsc-watch": "^6.0.0"
+  },
+  "dependencies": {
+    "@uniswap/v3-core": "^1.0.1",
+    "dotenv": "^16.0.3",
+    "ethers": "^6.1.0"
+  }
+}
