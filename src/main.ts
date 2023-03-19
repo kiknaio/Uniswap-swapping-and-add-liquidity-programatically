@@ -1,65 +1,39 @@
 import { Token } from "@uniswap/sdk-core";
 import { Pool, Tick, TickListDataProvider } from "@uniswap/v3-sdk";
 import BigNumber from "bignumber.js";
-import { poolContract } from "./Pool";
+import { getPoolImmutables, getPoolState, poolContract } from "./Pool";
 
 async function main() {
-  const wbtcAddress = "0x2260FAC5E5542a773Aa44fBCfeDf7C193bc2C599";
-  const wethAddress = "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2";
+  const [immutables, state] = await Promise.all([
+    getPoolImmutables(),
+    getPoolState(),
+  ]);
 
-  const token0 = new Token(1, wbtcAddress, 8, "WBTC", "Wrapped Bitcoin");
-  const token1 = new Token(1, wethAddress, 18, "WETH", "Wrapped Ether");
+  const tokenInAddress = "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48";
+  const tokenOutAddress = "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2";
 
-  const poolFee = await poolContract.fee();
-
-  const slot0 = await poolContract.slot0();
-  const poolPrice = slot0.sqrtPrice;
-  const poolLiquidity = await poolContract.liquidity();
-
-  const tickSpacing = await poolContract.tickSpacing();
-
-  console.log("tickSpacing", tickSpacing);
-
-  const nearestTick = Math.floor(
-    BigNumber((slot0[1] / tickSpacing) * tickSpacing).toNumber()
-  );
-
-  const tickLowerIndex = nearestTick - 60 * 100;
-  const tickUpperIndex = nearestTick + 60 * 100;
-
-  const tickLowerData = await poolContract.ticks(tickLowerIndex);
-
-  console.log(tickLowerIndex);
-
-  const tickLower = new Tick({
-    index: tickLowerIndex,
-    liquidityGross: tickLowerData.liquidityGross,
-    liquidityNet: tickLowerData.liquidityNet,
-  });
-
-  const tickUpperData = await poolContract.ticks(tickUpperIndex);
-  const tickUpper = new Tick({
-    index: tickUpperIndex,
-    liquidityGross: tickUpperData.liquidityGross,
-    liquidityNet: tickUpperData.liquidityNet,
-  });
-
-  const tickList = new TickListDataProvider(
-    [tickLower, tickUpper],
-    tickSpacing
-  );
+  const tokenIn = new Token(1, tokenInAddress, 8, "USDC", "USDC");
+  const tokenOut = new Token(1, tokenOutAddress, 18, "WETH", "Wrapped Ether");
 
   const pool = new Pool(
-    token0,
-    token1,
-    poolFee,
-    poolPrice,
-    poolLiquidity,
-    slot0[1],
-    tickList
+    tokenIn,
+    tokenOut,
+    Number(immutables.fee),
+    state.sqrtPriceX96.toString(),
+    state.liquidity.toString(),
+    Number(state.tick)
   );
 
-  console.log(pool);
+  console.log(
+    `1 ${pool.token0.symbol} = ${pool.token0Price.toSignificant()} ${
+      pool.token1.symbol
+    }`
+  );
+  console.log(
+    `1 ${pool.token1.symbol} = ${pool.token1Price.toSignificant()} ${
+      pool.token0.symbol
+    }`
+  );
 }
 
 main();
