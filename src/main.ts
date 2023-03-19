@@ -1,6 +1,5 @@
 import { Token } from "@uniswap/sdk-core";
 import { Pool, Tick, TickListDataProvider } from "@uniswap/v3-sdk";
-import BigNumber from "bignumber.js";
 import { getPoolImmutables, getPoolState, poolContract } from "./Pool";
 
 async function main() {
