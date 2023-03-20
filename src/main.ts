@@ -46,9 +46,11 @@ async function main() {
   const route = new Route([pool], tokenIn, tokenOut);
   // const trade = await Trade.exactIn(route, amountIn);
 
-  console.log(`1 USDC can be swapped fro ${route.midPrice.toSignificant(6)}`);
   console.log(
-    `1 WETH can be swapped fro ${route.midPrice.invert().toSignificant(6)}`
+    `1 USDC can be swapped fro ${route.midPrice.toSignificant(6)} WETH`
+  );
+  console.log(
+    `1 WETH can be swapped fro ${route.midPrice.invert().toSignificant(6)} USDC`
   );
   return;
 
