@@ -33,6 +33,8 @@ async function main() {
       pool.token0.symbol
     }`
   );
+
+  // Simulate: Swap 500 USDC for ETH
 }
 
 main();

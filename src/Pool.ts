@@ -2,10 +2,16 @@ import dotenv from "dotenv";
 import { ethers } from "ethers";
 import { JsonRpcProvider } from "ethers";
 import UniswapV3Pool from "@uniswap/v3-core/artifacts/contracts/interfaces/IUniswapV3Pool.sol/IUniswapV3Pool.json";
+const UniswapV3Router = require("@uniswap/v3-periphery/artifacts/contracts/SwapRouter.sol/SwapRouter.json");
 
 dotenv.config();
 
 const INFURA_API_KEY = process.env.INFURA_API_KEY;
+
+/**
+ * @dev The Uniswap V3 deployed contract addresses:
+ * https://github.com/Uniswap/v3-periphery/blob/main/deploys.md
+ */
 
 // WBTC/ETH pool
 const poolAddress = "0x88e6a0c2ddd26feeb64f039a2c41296fcb3f5640";
@@ -17,6 +23,14 @@ const provider = new JsonRpcProvider(
 export const poolContract = new ethers.Contract(
   poolAddress,
   UniswapV3Pool.abi,
+  provider
+);
+
+// Create a router instance
+const routerAddress = "0xE592427A0AEce92De3Edee1F18E0157C05861564";
+const routerContract = new ethers.Contract(
+  routerAddress,
+  UniswapV3Router.abi,
   provider
 );
 
