@@ -19,6 +19,10 @@ const provider = new JsonRpcProvider(
   `https://mainnet.infura.io/v3/${INFURA_API_KEY}`
 );
 
+// Create a signer
+export const signer = ethers.Wallet.createRandom();
+export const account = signer.connect(provider);
+
 // Create a pool instance
 export const poolContract = new ethers.Contract(
   poolAddress,
@@ -34,6 +38,10 @@ const routerContract = new ethers.Contract(
   provider
 );
 
+// Connect the router to the account
+export const uniswapRouter = routerContract.connect(account);
+
+// Get the pool immutables
 export const getPoolImmutables = async function () {
   const [factory, token0, token1, fee, tickSpacing, maxLiquidityPerTick] =
     await Promise.all([
@@ -55,6 +63,7 @@ export const getPoolImmutables = async function () {
   };
 };
 
+// Get the pool state
 export const getPoolState = async function () {
   const [liquidity, slot] = await Promise.all([
     poolContract.liquidity(),
