@@ -30,6 +30,7 @@ async function main() {
     Number(state.tick)
   );
 
+  // Log price from pool
   console.log(
     `1 ${pool.token0.symbol} = ${pool.token0Price.toSignificant()} ${
       pool.token1.symbol
@@ -46,6 +47,7 @@ async function main() {
   const route = new Route([pool], tokenIn, tokenOut);
   // const trade = await Trade.exactIn(route, amountIn);
 
+  // Log price from route
   console.log(
     `1 USDC can be swapped fro ${route.midPrice.toSignificant(6)} WETH`
   );
